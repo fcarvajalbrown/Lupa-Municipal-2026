@@ -1,0 +1,10 @@
+.ignore/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+results1.json
+results2.json
+targets.txt

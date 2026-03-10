@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lupa Municipal — Auditoría Digital del Estado Chileno 2026</title>
+<meta name="description" content="82 municipios con bases de datos expuestas a internet. 50 con certificados SSL inválidos. 7 corriendo PHP sin soporte desde 2018.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f2ede4;
+  --paper-dark: #e8e1d4;
+  --ink: #1c1a17;
+  --ink-mid: #3d3a34;
+  --ink-faint: #7a746a;
+  --red: #b01c1c;
+  --red-pale: #f7e8e8;
+  --amber: #9a5a00;
+  --amber-pale: #fdf3e0;
+  --green: #1e5c3a;
+  --green-pale: #e8f4ed;
+  --rule: #c5bdb0;
+  --col: 980px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Crimson Pro',Georgia,serif;
+  background:var(--paper);
+  color:var(--ink);
+  font-size:18px;
+  line-height:1.65;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* MASTHEAD */
+.masthead{background:var(--ink);color:var(--paper);position:relative;overflow:hidden}
+.masthead::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.018) 2px,rgba(255,255,255,.018) 4px);pointer-events:none}
+.masthead-top{border-bottom:1px solid rgba(255,255,255,.14);padding:11px 32px;display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:rgba(255,255,255,.38)}
+.flag{background:var(--red);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.15em;padding:2px 8px;text-transform:uppercase}
+.masthead-body{padding:52px 32px 44px;max-width:var(--col);margin:0 auto}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--red);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+.kicker::before{content:'';display:inline-block;width:32px;height:2px;background:var(--red)}
+h1.hl{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,8vw,92px);line-height:.93;letter-spacing:.01em;color:#fff;margin-bottom:24px;max-width:850px}
+h1.hl em{color:var(--red);font-style:normal}
+.deck{font-size:19px;font-weight:300;color:rgba(255,255,255,.74);max-width:640px;line-height:1.58;border-left:3px solid var(--red);padding-left:18px;margin-bottom:30px}
+.byline{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.33);text-transform:uppercase}
+
+/* ALERT BAR */
+.alert-bar{background:var(--red);color:#fff;padding:9px 32px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.07em;display:flex;gap:28px;overflow-x:auto;white-space:nowrap}
+.alert-bar span{opacity:.65}.alert-bar strong{opacity:1}
+
+/* WRAPPER */
+.w{max-width:var(--col);margin:0 auto;padding:0 32px}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1.5px solid var(--ink);margin:48px 0 0}
+.sc{padding:28px 22px 22px;border-right:1px solid var(--ink)}
+.sc:last-child{border-right:none}
+.sc.crit{background:var(--red-pale)}.sc.warn{background:var(--amber-pale)}
+.sn{font-family:'Bebas Neue',sans-serif;font-size:66px;line-height:1;display:block;margin-bottom:3px}
+.sc.crit .sn{color:var(--red)}.sc.warn .sn{color:var(--amber)}
+.sl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);line-height:1.45}
+.slaw{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--red);letter-spacing:.07em;margin-top:8px;opacity:.8}
+
+/* SECTION */
+.section{margin-top:56px}
+.srule{border-top:3px solid var(--ink);padding-top:10px;margin-bottom:18px}
+.eye{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:4px}
+h2.sh{font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,4vw,44px);letter-spacing:.02em;line-height:1;margin-bottom:18px}
+.lede{font-size:20px;font-weight:300;max-width:720px;line-height:1.58;margin-bottom:14px;color:var(--ink-mid)}
+.bc{font-size:15.5px;color:var(--ink-mid);max-width:700px;margin-bottom:11px}
+
+/* FINDING CARDS */
+.fg{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--ink);margin:26px 0}
+.fc{padding:24px 22px 20px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.fc:nth-child(2n){border-right:none}.fc:nth-last-child(-n+2){border-bottom:none}
+.fc.lead{grid-column:1/-1;border-right:none;background:var(--red-pale);border-left:4px solid var(--red)}
+.fn{font-family:'Bebas Neue',sans-serif;font-size:54px;line-height:1;color:var(--red);display:block;margin-bottom:3px}
+.ft{font-family:'Crimson Pro',serif;font-size:18px;font-weight:600;margin-bottom:7px;line-height:1.3}
+.fb{font-size:14px;color:var(--ink-mid);line-height:1.55}
+.ftag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;margin-bottom:9px}
+.ftag.r{background:var(--red);color:#fff}.ftag.a{background:var(--amber);color:#fff}.ftag.b{background:var(--ink);color:var(--paper)}
+
+/* CONTEXT BOX */
+.cbox{background:var(--ink);color:var(--paper);padding:22px 28px;margin:26px 0;position:relative}
+.cbox::before{content:'CONTEXTO LEGAL';font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--red);display:block;margin-bottom:10px}
+.cbox p{font-size:14.5px;color:rgba(242,237,228,.78);line-height:1.6;margin-bottom:8px}
+.cbox p:last-child{margin-bottom:0}
+.cbox strong{color:#fff}
+
+/* METHODOLOGY */
+.mbox{border:1px solid var(--rule);background:var(--paper-dark);padding:14px 18px;margin:18px 0;font-size:13.5px;color:var(--ink-mid)}
+.mbox code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:rgba(0,0,0,.06);padding:1px 5px}
+
+/* FILTER BAR */
+.fbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0 6px;padding:11px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.flabel{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-right:4px}
+.fbar select,.fbar input{font-family:'JetBrains Mono',monospace;font-size:11px;background:#fff;border:1px solid var(--rule);padding:5px 10px;color:var(--ink);cursor:pointer;appearance:none;-webkit-appearance:none}
+.fbar select:focus,.fbar input:focus{outline:2px solid var(--ink);outline-offset:0}
+.cnt{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-faint);letter-spacing:.06em}
+
+/* SHAME TABLE */
+.st{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:22px}
+.st thead tr{border-bottom:2px solid var(--ink);border-top:1.5px solid var(--ink)}
+.st th{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;padding:7px 8px 7px 6px;text-align:left;color:var(--ink-faint);cursor:pointer;user-select:none;white-space:nowrap}
+.st th:hover{color:var(--ink)}
+.st th.sa::after{content:" ↑";color:var(--red)}.st th.sd::after{content:" ↓";color:var(--red)}
+.st tbody tr{border-bottom:1px solid var(--rule);transition:background 80ms;cursor:pointer}
+.st tbody tr:hover{background:var(--paper-dark)}
+.st td{padding:8px 8px 8px 6px;vertical-align:middle;color:var(--ink-mid)}
+.td-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--rule);width:36px;text-align:right;padding-right:12px}
+.td-host{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500;color:var(--ink)}
+.td-host a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--rule)}
+.td-host a:hover{border-color:var(--ink)}
+
+/* BADGES */
+.b{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.06em;padding:2px 6px;text-transform:uppercase;font-weight:500;white-space:nowrap;border:1px solid transparent}
+.bf{background:var(--red-pale);color:var(--red);border-color:#e8c0c0}
+.bw{background:var(--amber-pale);color:var(--amber);border-color:#f0d090}
+.bo{background:var(--green-pale);color:var(--green);border-color:#b8d8c8}
+.bn{background:#f0ece6;color:var(--ink-faint);border-color:#ddd8d0}
+.bc2{background:var(--red);color:#fff}
+
+/* EXPAND */
+.xbtn{background:none;border:1px solid var(--rule);cursor:pointer;color:var(--ink-faint);font-size:12px;padding:1px 6px;line-height:1.4;font-family:'JetBrains Mono',monospace;transition:all 80ms}
+.xbtn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.xbtn.open{background:var(--red);color:#fff;border-color:var(--red)}
+.drow td{padding:0!important;border-bottom:1px solid var(--rule)}
+.dcontent{background:var(--ink);color:var(--paper);padding:10px 16px 10px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 22px}
+.dcontent .di{color:rgba(242,237,228,.42);font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.dcontent .dv{color:rgba(242,237,228,.88)}
+.dcontent .dv.bad{color:#ff7070}.dcontent .dv.warn{color:#ffc050}
+
+/* PRESS BOX */
+.pbox{border:2px solid var(--ink);padding:26px 30px;margin:36px 0;background:#fff;position:relative}
+.pbox::before{content:'NOTA DE PRENSA';position:absolute;top:-10px;left:20px;background:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.2em;padding:0 8px;color:var(--ink-faint)}
+.pbox h3{font-family:'Bebas Neue',sans-serif;font-size:26px;margin-bottom:12px;line-height:1.1}
+.pbox p{font-size:15px;color:var(--ink-mid);margin-bottom:9px;line-height:1.6}
+.pbox p:last-child{margin-bottom:0}
+.pbox strong{color:var(--ink)}
+
+/* FOOTER */
+.footer{margin-top:72px;border-top:3px double var(--ink);padding:22px 0 48px}
+.fi{max-width:var(--col);margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.05em;color:var(--ink)}
+.fr{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-faint);letter-spacing:.07em;text-align:right;line-height:1.9}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.masthead-body>*{animation:fadeUp .5s ease both}
+.kicker{animation-delay:.05s}h1.hl{animation-delay:.12s}.deck{animation-delay:.2s}.byline{animation-delay:.26s}
+
+@media(max-width:720px){
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .fg{grid-template-columns:1fr}.fc.lead{grid-column:1}
+  .hm{display:none}
+  h1.hl{font-size:44px}
+  .masthead-body{padding:32px 20px 26px}
+  .w{padding:0 18px}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <span>LUPA MUNICIPAL · AUDITORÍA DIGITAL 2026</span>
+    <span class="flag">Datos verificables</span>
+    <span id="md">—</span>
+  </div>
+  <div class="masthead-body">
+    <div class="kicker">Investigación de datos · 345 municipalidades auditadas</div>
+    <h1 class="hl">82 BASES DE DATOS<br>MUNICIPALES<br><em>EXPUESTAS</em><br>A INTERNET</h1>
+    <p class="deck">Una auditoría automatizada de todas las municipalidades de Chile revela que el 97% tiene puertos de riesgo alto expuestos, 50 operan sin SSL válido, y 7 siguen corriendo software sin soporte desde 2018. Todo esto mientras la Ley 21.663 de Ciberseguridad ya está en vigor.</p>
+    <div class="byline">Lupa Municipal · Código abierto · Datos al <span id="md2">—</span></div>
+  </div>
+</header>
+
+<div class="alert-bar">
+  <span><strong id="ab-mysql">82</strong> municipios con MySQL expuesto</span>
+  <span><strong id="ab-ssl">50</strong> sin SSL válido</span>
+  <span><strong id="ab-php5">7</strong> con PHP 5.x EOL</span>
+  <span><strong id="ab-rdp">1</strong> con RDP expuesto</span>
+  <span><strong id="ab-cp">221</strong> con cPanel accesible</span>
+  <span><strong>© 2001</strong> copyright más antiguo</span>
+</div>
+
+<div class="w">
+
+  <div class="stats-grid">
+    <div class="sc crit">
+      <span class="sn" id="s-db">334</span>
+      <div class="sl">Municipios con puertos peligrosos expuestos a internet</div>
+      <div class="slaw">↑ Viola Art. 6 Ley 21.663</div>
+    </div>
+    <div class="sc crit">
+      <span class="sn" id="s-ssl">50</span>
+      <div class="sl">Sin certificado SSL válido — tráfico ciudadano sin cifrar</div>
+      <div class="slaw">↑ Ley 21.663 + Ley 20.285</div>
+    </div>
+    <div class="sc warn">
+      <span class="sn" id="s-leg">23</span>
+      <div class="sl">Con copyright ≥ 5 años — software probablemente abandonado</div>
+      <div class="slaw">↑ SINIM presupuesto modernización</div>
+    </div>
+    <div class="sc">
+      <span class="sn" id="s-php">38</span>
+      <div class="sl">Exponen versión de PHP en cabeceras HTTP públicas</div>
+      <div class="slaw">↑ Superficie de ataque innecesaria</div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="srule"><div class="eye">Hallazgos principales</div></div>
+    <h2 class="sh">Lo que encontramos</h2>
+
+    <div class="fg">
+      <div class="fc lead">
+        <span class="ftag r">Crítico</span>
+        <div class="fn" id="fc-mysql">82</div>
+        <div class="ft">Bases de datos MySQL expuestas a cualquier conexión desde internet</div>
+        <p class="fb">El puerto 3306 de MySQL está abierto y accesible desde internet en 82 municipios. Cualquier persona puede intentar conectarse directamente a la base de datos que almacena registros de contribuyentes, datos personales de vecinos y trámites municipales — sin necesidad de explotar ninguna vulnerabilidad. El puerto simplemente está abierto. Entre los afectados: Antofagasta, La Serena, Viña del Mar, San Miguel, Vallenar, San Carlos, Angol.</p>
+      </div>
+      <div class="fc">
+        <span class="ftag r">Alto</span>
+        <div class="fn">221</div>
+        <div class="ft">Panel de administración de hosting (cPanel) expuesto públicamente</div>
+        <p class="fb">El 64% de los municipios tiene su panel de control de servidor accesible desde internet. Desde ahí, un atacante puede intentar tomar control completo del servidor sin necesidad de pasar por el sitio web.</p>
+      </div>
+      <div class="fc">
+        <span class="ftag r">Alto</span>
+        <div class="fn">50</div>
+        <div class="ft">Sin SSL válido: el candado roto del Estado</div>
+        <p class="fb">50 municipios operan sin certificado SSL funcional. 18 tienen el certificado técnicamente vencido. 9 tienen el dominio directamente caído (DNS failure). Cuando un vecino usa estos sitios, sus datos viajan sin cifrar.</p>
+      </div>
+      <div class="fc">
+        <span class="ftag a">Moderado</span>
+        <div class="fn">7</div>
+        <div class="ft">PHP 5.x: software sin parches de seguridad desde diciembre 2018</div>
+        <p class="fb">PHP 5 dejó de recibir actualizaciones hace más de 7 años. Municipios afectados: Chillán, Casablanca, Los Sauces, Hualpen, Panquehue, Melipeuco, San Fabián. Siguen usando este software hoy.</p>
+      </div>
+    </div>
+
+    <div class="cbox">
+      <p>La <strong>Ley Marco de Ciberseguridad N° 21.663</strong> (vigente desde 2024) obliga explícitamente a todos los organismos del Estado — incluyendo municipios — a implementar medidas mínimas de seguridad. La ANCI puede multar hasta <strong>40.000 UTM</strong> por incumplimiento.</p>
+      <p>El <strong>presidente José Antonio Kast</strong> asumió el 11 de marzo de 2026 — esta auditoría fue realizada en esa misma semana. Su gobierno nombró como Subsecretaria de Telecomunicaciones a una abogada especialista en protección de datos y ciberseguridad. Hereda un Estado digital en estado crítico.</p>
+      <p>El <strong>informe AMUCH 2024</strong> ya advertía que el 68.7% de municipios no tiene plan de respuesta ante incidentes y el 71% no ha capacitado a su personal en ciberseguridad en 18 meses. Esta auditoría técnica lo confirma con datos concretos.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="srule"><div class="eye">Tabla completa</div></div>
+    <h2 class="sh">Las 345 municipalidades auditadas</h2>
+    <p class="bc">Ordenadas por nivel de riesgo calculado. Clic en cualquier fila para ver el detalle técnico completo.</p>
+
+    <div class="fbar">
+      <span class="flabel">Filtrar:</span>
+      <select id="f-ssl"><option value="">SSL — todos</option><option value="expired">Certificado vencido</option><option value="missing">Sin SSL</option><option value="valid">SSL válido</option></select>
+      <select id="f-db"><option value="">Puertos — todos</option><option value="mysql">MySQL expuesto</option><option value="cpanel">cPanel expuesto</option><option value="rdp">RDP expuesto</option><option value="any">Cualquier riesgo alto</option><option value="none">Sin puertos peligrosos</option></select>
+      <select id="f-php"><option value="">PHP — todos</option><option value="5">PHP 5.x (EOL)</option><option value="7">PHP 7.x (EOL)</option><option value="8">PHP 8.x</option><option value="exposed">PHP expuesto</option></select>
+      <select id="f-copy"><option value="">Copyright — todos</option><option value="ancient">≥ 10 años</option><option value="old">5–9 años</option><option value="recent">&lt; 5 años</option></select>
+      <input type="text" id="f-q" placeholder="Buscar municipio…" style="width:155px">
+      <span class="cnt" id="rowcnt">— municipios</span>
+    </div>
+
+    <table class="st" id="st">
+      <thead><tr>
+        <th class="hm">#</th>
+        <th data-col="hostname">Municipio</th>
+        <th data-col="ssl">SSL</th>
+        <th data-col="db" class="hm">Base datos</th>
+        <th data-col="php" class="hm">PHP</th>
+        <th data-col="copyright" class="hm">Copyright</th>
+        <th data-col="score">Riesgo</th>
+        <th></th>
+      </tr></thead>
+      <tbody id="tb"><tr><td colspan="8" style="text-align:center;padding:40px;font-family:monospace;font-size:11px;color:var(--ink-faint)">Cargando…</td></tr></tbody>
+    </table>
+
+    <div class="mbox">
+      <strong style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase">Metodología</strong> —
+      Escaneo TCP + HTTP realizado el 10 de marzo de 2026 sobre 345 dominios municipales.
+      (1) <em>SSL</em>: conexión TLS directa con fallback httpx.
+      (2) <em>Puertos</em>: TCP connect a <code>21, 22, 80, 443, 2083, 2222, 3306, 3389, 5432, 6379, 8080, 9200, 27017</code>.
+      (3) <em>Legacy</em>: GET de homepage, análisis de cabeceras HTTP + scraping de footer y meta generator.
+      Código fuente reproducible disponible públicamente.
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="srule"><div class="eye">Para periodistas</div></div>
+    <h2 class="sh">Nota de prensa lista para usar</h2>
+    <div class="pbox">
+      <h3>82 municipios chilenos tienen sus bases de datos abiertas a internet</h3>
+      <p><strong>Santiago, 10 de marzo de 2026.</strong> Una auditoría automatizada sobre los 345 sitios web municipales de Chile reveló que <strong>82 municipalidades</strong> — el 24% del total — tienen el puerto de su base de datos MySQL directamente expuesto a internet, permitiendo que cualquier persona en el mundo intente conectarse a los registros de contribuyentes, trámites y datos personales de sus vecinos.</p>
+      <p>El hallazgo ocurre en la semana exacta de cambio de mando presidencial. La Ley Marco de Ciberseguridad N° 21.663 ya está en vigor, y obliga a todos los organismos del Estado a cumplir con medidas mínimas de seguridad. La ANCI puede multar hasta 40.000 UTM por incumplimiento.</p>
+      <p>Además, <strong>50 municipios operan sin SSL válido</strong> — los datos que los vecinos ingresan en formularios viajan sin cifrar — y <strong>7 municipios siguen corriendo PHP 5.x</strong>, software sin parches de seguridad desde diciembre de 2018. 221 municipios tienen el panel de administración de su servidor (cPanel) accesible desde internet. Entre los municipios con MySQL expuesto se cuentan Antofagasta, La Serena, Viña del Mar, San Miguel y Vallenar.</p>
+      <p>El informe AMUCH 2024 ya advertía que el 68.7% de los municipios no tiene plan de respuesta ante incidentes. Esta auditoría técnica lo confirma: el problema es verificable desde cualquier computador con conexión a internet.</p>
+      <p><em>Metodología, código fuente y datos crudos disponibles públicamente.</em></p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer">
+  <div class="fi">
+    <div class="fl">Lupa Municipal</div>
+    <div class="fr">
+      <div>Auditoría automatizada · Código abierto</div>
+      <div id="fd">—</div>
+      <div>345 municipalidades · Chile 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+var allData=[], sortCol='score', sortDir='desc', openRows=new Set();
+
+function score(r){
+  var s=0, p=r.high_risk_ports||[];
+  if(p.some(x=>x.port===3306))s+=50;
+  if(p.some(x=>x.port===3389))s+=45;
+  if(p.some(x=>x.port===6379))s+=40;
+  if(p.some(x=>x.port===2083))s+=20;
+  if(p.length)s+=10;
+  if(r.ssl.expired)s+=35; else if(!r.ssl.valid)s+=25;
+  var v=r.legacy.php_version||'';
+  if(v.startsWith('5'))s+=30; else if(v.startsWith('7'))s+=10;
+  var a=r.legacy.years_outdated||0;
+  if(a>=10)s+=20; else if(a>=5)s+=10;
+  return s;
+}
+
+function sslB(r){
+  if(r.ssl.expired)return'<span class="b bf">Vencido</span>';
+  if(!r.ssl.valid&&r.ssl.error&&r.ssl.error.includes('HTTP only'))return'<span class="b bf">Sin SSL</span>';
+  if(!r.ssl.valid)return'<span class="b bw">Inválido</span>';
+  if(r.ssl.days_left!==null&&r.ssl.days_left<30)return'<span class="b bw">'+r.ssl.days_left+'d</span>';
+  return'<span class="b bo">Válido</span>';
+}
+function dbB(r){
+  var p=r.high_risk_ports||[];
+  if(!p.length)return'<span class="b bo">—</span>';
+  var crit=p.some(x=>['MySQL','Redis','MongoDB','PostgreSQL'].includes(x.service));
+  return crit?'<span class="b bc2" title="'+p.map(x=>x.service).join(', ')+'">'+p.length+' expuesto'+(p.length>1?'s':'')+'</span>'
+             :'<span class="b bw" title="'+p.map(x=>x.service).join(', ')+'">'+p.length+' exp.</span>';
+}
+function phpB(r){
+  var v=r.legacy.php_version;
+  if(!v)return'<span class="b bn">—</span>';
+  if(v.startsWith('5'))return'<span class="b bc2">PHP '+v+'</span>';
+  if(v.startsWith('7'))return'<span class="b bf">PHP '+v+'</span>';
+  return'<span class="b bo">PHP '+v+'</span>';
+}
+function copyB(r){
+  var yr=r.legacy.copyright_year;
+  if(!yr)return'<span class="b bn">—</span>';
+  var a=r.legacy.years_outdated||0;
+  if(a>=10)return'<span class="b bf">© '+yr+'</span>';
+  if(a>=5)return'<span class="b bw">© '+yr+'</span>';
+  return'<span class="b bo">© '+yr+'</span>';
+}
+function riskB(s){
+  if(s>=80)return'<span class="b bc2">Crítico</span>';
+  if(s>=50)return'<span class="b bf">Alto</span>';
+  if(s>=20)return'<span class="b bw">Medio</span>';
+  return'<span class="b bo">Bajo</span>';
+}
+function fmtD(iso){if(!iso)return'—';return new Date(iso).toLocaleDateString('es-CL',{year:'numeric',month:'long',day:'numeric'});}
+
+function filter(){
+  var ssl=document.getElementById('f-ssl').value,
+      db=document.getElementById('f-db').value,
+      php=document.getElementById('f-php').value,
+      copy=document.getElementById('f-copy').value,
+      q=(document.getElementById('f-q').value||'').toLowerCase();
+  return allData.filter(function(r){
+    if(ssl==='expired'&&!r.ssl.expired)return false;
+    if(ssl==='missing'&&(r.ssl.expired||r.ssl.valid))return false;
+    if(ssl==='valid'&&!r.ssl.valid)return false;
+    var p=r.high_risk_ports||[];
+    if(db==='mysql'&&!p.some(x=>x.port===3306))return false;
+    if(db==='cpanel'&&!(r.ports||[]).some(x=>x.port===2083))return false;
+    if(db==='rdp'&&!p.some(x=>x.port===3389))return false;
+    if(db==='any'&&!p.length)return false;
+    if(db==='none'&&p.length)return false;
+    var v=r.legacy.php_version||'';
+    if(php==='5'&&!v.startsWith('5'))return false;
+    if(php==='7'&&!v.startsWith('7'))return false;
+    if(php==='8'&&!v.startsWith('8'))return false;
+    if(php==='exposed'&&!v)return false;
+    var a=r.legacy.years_outdated||0;
+    if(copy==='ancient'&&a<10)return false;
+    if(copy==='old'&&(a<5||a>=10))return false;
+    if(copy==='recent'&&(a>=5||!r.legacy.copyright_year))return false;
+    if(q&&!r.hostname.includes(q))return false;
+    return true;
+  });
+}
+
+function sortRows(data){
+  return data.slice().sort(function(a,b){
+    var av,bv;
+    if(sortCol==='hostname'){av=a.hostname;bv=b.hostname;}
+    else if(sortCol==='ssl'){av=a.ssl.valid?1:0;bv=b.ssl.valid?1:0;}
+    else if(sortCol==='db'){av=(a.high_risk_ports||[]).length;bv=(b.high_risk_ports||[]).length;}
+    else if(sortCol==='php'){av=a.legacy.php_version||'';bv=b.legacy.php_version||'';}
+    else if(sortCol==='copyright'){av=a.legacy.copyright_year||9999;bv=b.legacy.copyright_year||9999;}
+    else{av=score(a);bv=score(b);}
+    if(av<bv)return sortDir==='asc'?-1:1;
+    if(av>bv)return sortDir==='asc'?1:-1;
+    return 0;
+  });
+}
+
+function render(){
+  var filt=filter(), sorted=sortRows(filt), tb=document.getElementById('tb');
+  document.getElementById('rowcnt').textContent=sorted.length+' municipios';
+  if(!sorted.length){tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;font-family:monospace;font-size:11px;color:var(--ink-faint)">Sin resultados.</td></tr>';return;}
+  var rows=[];
+  sorted.forEach(function(r,i){
+    var open=openRows.has(r.hostname), s=score(r);
+    rows.push('<tr data-h="'+r.hostname+'" onclick="toggle(\''+r.hostname+'\')">'+
+      '<td class="td-rank hm">'+(i+1)+'</td>'+
+      '<td class="td-host"><a href="https://'+r.hostname+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+r.hostname+'</a></td>'+
+      '<td>'+sslB(r)+'</td>'+
+      '<td class="hm">'+dbB(r)+'</td>'+
+      '<td class="hm">'+phpB(r)+'</td>'+
+      '<td class="hm">'+copyB(r)+'</td>'+
+      '<td>'+riskB(s)+'</td>'+
+      '<td><button class="xbtn'+(open?' open':'')+'" onclick="event.stopPropagation();toggle(\''+r.hostname+'\')">'+(open?'▲':'▼')+'</button></td>'+
+      '</tr>');
+    if(open){
+      var pp=r.ports||[], hp=r.high_risk_ports||[];
+      var portStr=pp.length?pp.map(function(p){return'<span class="b '+(hp.some(function(h){return h.port===p.port;})?'bf':'bn')+'">'+p.port+' '+p.service+'</span>';}).join(' '):'<span class="b bo">Sin puertos peligrosos</span>';
+      rows.push('<tr class="drow"><td colspan="8"><div class="dcontent">'+
+        '<div><div class="di">Puertos abiertos</div><div class="dv">'+portStr+'</div></div>'+
+        '<div><div class="di">Servidor</div><div class="dv'+(r.legacy.server?' warn':'')+'"><span class="b bn">'+(r.legacy.server||'—')+'</span></div></div>'+
+        '<div><div class="di">PHP</div><div class="dv'+((r.legacy.php_version||'').startsWith('5')?' bad':'')+'">'+( r.legacy.php_version||'—')+'</div></div>'+
+        '<div><div class="di">Última modif.</div><div class="dv'+((r.legacy.days_since_update||0)>730?' warn':'')+'">'+( r.legacy.last_modified||'—')+((r.legacy.days_since_update)?' ('+r.legacy.days_since_update+'d)':'')+'</div></div>'+
+        '<div><div class="di">Copyright</div><div class="dv'+((r.legacy.years_outdated||0)>=10?' bad':(r.legacy.years_outdated||0)>=5?' warn':'')+'">'+( r.legacy.copyright_year?'© '+r.legacy.copyright_year:'—')+'</div></div>'+
+        '<div><div class="di">CMS</div><div class="dv">'+( r.legacy.cms?(r.legacy.cms+(r.legacy.cms_version?' '+r.legacy.cms_version:'')):'—')+'</div></div>'+
+        '<div><div class="di">Respuesta</div><div class="dv'+((r.legacy.response_time_ms||0)>5000?' warn':'')+'">'+( r.legacy.response_time_ms?r.legacy.response_time_ms+'ms':'—')+'</div></div>'+
+        '<div><div class="di">SSL expiry</div><div class="dv'+(r.ssl.expired?' bad':'')+'">'+( r.ssl.not_after||r.ssl.error||'—')+'</div></div>'+
+      '</div></td></tr>');
+    }
+  });
+  tb.innerHTML=rows.join('');
+}
+
+function toggle(h){if(openRows.has(h))openRows.delete(h);else openRows.add(h);render();}
+
+document.querySelectorAll('.st th[data-col]').forEach(function(th){
+  th.addEventListener('click',function(){
+    var c=th.dataset.col;
+    if(sortCol===c)sortDir=sortDir==='asc'?'desc':'asc'; else{sortCol=c;sortDir='desc';}
+    document.querySelectorAll('.st th').forEach(function(t){t.classList.remove('sa','sd');});
+    th.classList.add(sortDir==='asc'?'sa':'sd');
+    render();
+  });
+});
+['f-ssl','f-db','f-php','f-copy','f-q'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',render);
+});
+
+function init(data){
+  allData=data.results;
+  var s=data.summary;
+  document.getElementById('s-db').textContent=s.exposed_db_ports;
+  document.getElementById('s-ssl').textContent=s.ssl_invalid;
+  document.getElementById('s-leg').textContent=s.legacy_sites;
+  document.getElementById('s-php').textContent=s.php_exposed;
+  var mysql=data.results.filter(function(r){return(r.high_risk_ports||[]).some(function(p){return p.port===3306;});}).length;
+  var cp=data.results.filter(function(r){return(r.ports||[]).some(function(p){return p.port===2083;});}).length;
+  var rdp=data.results.filter(function(r){return(r.high_risk_ports||[]).some(function(p){return p.port===3389;});}).length;
+  var php5=data.results.filter(function(r){return(r.legacy.php_version||'').startsWith('5');}).length;
+  document.getElementById('ab-mysql').textContent=mysql;
+  document.getElementById('ab-ssl').textContent=s.ssl_invalid;
+  document.getElementById('ab-php5').textContent=php5;
+  document.getElementById('ab-rdp').textContent=rdp;
+  document.getElementById('ab-cp').textContent=cp;
+  document.getElementById('fc-mysql').textContent=mysql;
+  var d=fmtD(s.generated_at);
+  document.getElementById('md').textContent=d;
+  document.getElementById('md2').textContent=d;
+  document.getElementById('fd').textContent='Escaneo: '+d;
+  render();
+}
+
+function load(){
+  if(typeof AUDIT_DATA!=='undefined'){init(AUDIT_DATA);return;}
+  fetch('results.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(init).catch(function(){
+    document.getElementById('tb').innerHTML='<tr><td colspan="8" style="text-align:center;padding:40px;font-family:monospace;font-size:11px;color:var(--ink-faint)">Coloca results.js junto a index.html para ver los datos.</td></tr>';
+  });
+}
+load();
+</script>
+<script src="results.js" onerror="void(0)"></script>
+<script>if(typeof AUDIT_DATA!=='undefined'&&allData.length===0)init(AUDIT_DATA);</script>
+</body>
+</html>
